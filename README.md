@@ -17,15 +17,8 @@
 ### 使用 CLI 工具创建项目
 
 ```bash
-# 使用 npm
-npm create vue3-admin-gpt my-project
-
-# 或使用 npx
-npx create-vue3-admin-gpt my-project
-
-# 或全局安装 CLI
-npm install -g vue3-admin-gpt
-create-vue3-admin-gpt my-project
+# 使用 npx（推荐）
+npx vue3-admin-gpt my-project
 ```
 
 ### 手动安装
