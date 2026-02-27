@@ -1,11 +1,10 @@
 {
-  "name": "vue3-admin-scaffold",
+  "name": "vue3-admin-gpt",
   "version": "1.0.0",
   "description": "A Vue3 admin template with Element Plus and Rspack",
-  "author": "",
+  "author": "pxq555",
   "license": "MIT",
-  "participants": [],
-  "homepage": "",
+  "homepage": "https://github.com/pxq555/vue3-admin-gpt#readme",
   "scripts": {
     "serve:rspack": "node --no-deprecation rspack.js serve",
     "build": "rimraf dist && node --no-deprecation rspack.js build",
@@ -13,15 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git+https://github.com/pxq555/vue3-admin-gpt.git"
   },
   "bin": {
-    "create-vue3-admin": "./cli.js"
+    "create-vue3-admin-gpt": "./cli.js"
   },
   "files": [
     "src",
     "public",
-    "layouts",
     "rspack.config.js",
     "rspack.js",
     ".env.*",

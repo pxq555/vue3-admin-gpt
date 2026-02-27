@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
 
 // 获取命令行参数
 const args = process.argv.slice(2);
@@ -50,12 +49,14 @@ function copyDir(src, dest, exclude = []) {
 
 // 主函数
 async function createProject() {
+  // 模板目录（cli.js 所在的目录）
   const templateDir = __dirname;
+  // 目标目录（在当前工作目录下创建）
   const targetDir = path.resolve(process.cwd(), projectName);
 
   // 检查目标目录是否已存在
   if (fs.existsSync(targetDir)) {
-    log.warn(`目录 ${projectName} 已存在`);
+    log.warn(`\n❌ 目录 ${projectName} 已存在\n`);
     process.exit(1);
   }
 
@@ -71,6 +72,11 @@ async function createProject() {
     'pnpm-lock.yaml',
     'package-lock.json',
     'yarn.lock',
+    '.claude',
+    // 排除常见的前端临时目录
+    'my-test-project',
+    'my-admin-app',
+    'test-project',
   ];
 
   // 复制模板文件

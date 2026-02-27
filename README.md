@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>Vue3 Admin Scaffold</h1>
+  <h1>Vue3 Admin GPT</h1>
   <p>一个基于 Vue 3 + Element Plus + Rspack 的后台管理系统脚手架</p>
 </div>
 
@@ -18,21 +18,21 @@
 
 ```bash
 # 使用 npm
-npm create vue3-admin-scaffold my-project
+npm create vue3-admin-gpt my-project
 
 # 或使用 npx
-npx create-vue3-admin my-project
+npx create-vue3-admin-gpt my-project
 
 # 或全局安装 CLI
-npm install -g vue3-admin-scaffold
-create-vue3-admin my-project
+npm install -g vue3-admin-gpt
+create-vue3-admin-gpt my-project
 ```
 
 ### 手动安装
 
 ```bash
 # 克隆项目
-git clone https://github.com/your-org/vue3-admin-scaffold.git my-project
+git clone https://github.com/pxq555/vue3-admin-gpt.git my-project
 cd my-project
 
 # 安装依赖
@@ -48,7 +48,7 @@ npm run build
 ## 项目结构
 
 ```
-vue3-admin-scaffold/
+vue3-admin-gpt/
 ├── src/
 │   ├── api/              # API 接口
 │   ├── assets/           # 静态资源

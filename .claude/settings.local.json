@@ -9,7 +9,16 @@
       "Bash(lsof:*)",
       "Bash(xargs kill:*)",
       "Bash(grep:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Bash(~/.ssh/config << 'EOF'\n\nHost github.com\n    Hostname ssh.github.com\n    Port 443\n    User git\nEOF)",
+      "Bash(ssh:*)",
+      "Bash(~/.ssh/config << 'EOF'\nHost github.com\n    Hostname github.com\n    Port 22\n    User git\nEOF)",
+      "Bash(pkill:*)",
+      "Bash(~/.ssh/config << 'EOF'\n# GitHub 配置 - 尝试多种方式\n\n# 标准配置（端口 22）\nHost github.com\n    Hostname github.com\n    Port 22\n    User git\n    ServerAliveInterval 60\n    ServerAliveCountMax 3\n\n# 备用配置（端口 443）\nHost github-ssh.github.com\n    Hostname ssh.github.com\n    Port 443\n    User git\n    ServerAliveInterval 60\n    ServerAliveCountMax 3\nEOF)",
+      "Bash(~/.ssh/config << 'EOF'\nHost github.com\n    Hostname ssh.github.com\n    Port 443\n    User git\nEOF)",
+      "Bash(# 增加 SSH 超时时间和保活设置\ncat > ~/.ssh/config << 'EOF'\nHost github.com\n    Hostname ssh.github.com\n    Port 443\n    User git\n    ServerAliveInterval 30\n    ServerAliveCountMax 6\n    ConnectTimeout 60\nEOF\necho \"\"SSH 配置已优化\"\")",
+      "Bash(node:*)",
+      "Bash(git add:*)"
     ]
   }
 }

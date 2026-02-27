@@ -1,7 +1,7 @@
 [简体中文](./README.md) | English
 
 <div align="center">
-  <h1>Vue3 Admin Scaffold</h1>
+  <h1>Vue3 Admin GPT</h1>
   <p>A Vue 3 admin template with Element Plus and Rspack</p>
 </div>
 
@@ -20,21 +20,21 @@
 
 ```bash
 # Using npm
-npm create vue3-admin-scaffold my-project
+npm create vue3-admin-gpt my-project
 
 # Or using npx
-npx create-vue3-admin my-project
+npx create-vue3-admin-gpt my-project
 
 # Or install globally
-npm install -g vue3-admin-scaffold
-create-vue3-admin my-project
+npm install -g vue3-admin-gpt
+create-vue3-admin-gpt my-project
 ```
 
 ### Manual Installation
 
 ```bash
 # Clone project
-git clone https://github.com/your-org/vue3-admin-scaffold.git my-project
+git clone https://github.com/pxq555/vue3-admin-gpt.git my-project
 cd my-project
 
 # Install dependencies
@@ -50,7 +50,7 @@ npm run build
 ## Project Structure
 
 ```
-vue3-admin-scaffold/
+vue3-admin-gpt/
 ├── src/
 │   ├── api/              # API interfaces
 │   ├── assets/           # Static assets
