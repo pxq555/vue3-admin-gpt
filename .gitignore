@@ -2,8 +2,12 @@
 .DS_Store
 node_modules
 dist
+# 环境变量文件
 .env.local
 .env.*.local
+# 保留模板环境变量文件，但忽略本地配置
+!.env.development
+!.env.production
 npm-debug.log*
 yarn.lock
 yarn-debug.log*

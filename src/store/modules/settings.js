@@ -1,12 +1,11 @@
 /**
- * @author https://github.com/zxwk1998/vue-admin-better （不想保留author可删除）
  * @description 所有全局配置的状态管理，如无必要请勿修改
  */
 
 import defaultSettings from '@/config'
 
 const { tabsBar, logo, layout, header, themeBar } = defaultSettings
-const theme = JSON.parse(localStorage.getItem('vue-admin-better-theme')) || ''
+const theme = JSON.parse(localStorage.getItem('vue3-admin-theme')) || ''
 const state = () => ({
   tabsBar: theme.tabsBar || tabsBar,
   logo,

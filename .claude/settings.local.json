@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(npm show:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run serve:rspack:*)",
+      "Bash(lsof:*)",
+      "Bash(xargs kill:*)",
+      "Bash(grep:*)",
+      "Bash(xargs:*)"
+    ]
+  }
+}

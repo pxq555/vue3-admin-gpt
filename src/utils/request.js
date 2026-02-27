@@ -18,23 +18,10 @@ import { ElLoading, ElMessage } from "element-plus";
 import { pickBy, identity } from "lodash-es";
 import { mock } from "mockjs";
 
-// 在生产环境下引入mock数据
-if (process.env.NODE_ENV === "production") {
-  const mockContext = require.context("../../mock/controller", true, /\.js$/);
-  mockContext.keys().forEach((key) => {
-    const mockModule = mockContext(key);
-    if (mockModule.default) {
-      mockModule.default;
-    } else {
-      mockModule;
-    }
-  });
-}
 
 let loadingInstance;
 
 /**
- * @author https://github.com/zxwk1998/vue-admin-better （不想保留author可删除）
  * @description 处理code异常
  * @param {*} code
  * @param {*} msg
@@ -129,7 +116,7 @@ instance.interceptors.response.use(
     } else {
       handleCode(code, msg);
       return Promise.reject(
-        `vue-admin-better请求异常拦截:${JSON.stringify({
+        `请求异常拦截:${JSON.stringify({
           url: config.url,
           code,
           msg,

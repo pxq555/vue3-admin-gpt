@@ -1,16 +1,14 @@
 <template>
-  <div v-if="routerView" class="app-main-container">
-    <vab-github-corner />
-    <transition mode="out-in" name="fade-transform">
-      <keep-alive :include="cachedRoutes" :max="keepAliveMaxNum">
-        <router-view :key="key" class="app-main-height" />
-      </keep-alive>
-    </transition>
-    <footer v-show="footerCopyright" class="footer-copyright">
-      Copyright
-      <el-icon><CopyDocument /></el-icon>
-      vue3-admin-better 开源免费版 {{ fullYear }}
-    </footer>
+  <div class="app-main-container">
+    <router-view v-slot="{ Component }">
+      <transition mode="out-in" name="fade-transform">
+        <keep-alive :include="cachedRoutes" :max="keepAliveMaxNum">
+          <component :is="Component" class="app-main-height" />
+        </keep-alive>
+      </transition>
+    </router-view>
+    <!-- <footer v-show="footerCopyright" class="footer-copyright">
+    </footer> -->
   </div>
 </template>
 

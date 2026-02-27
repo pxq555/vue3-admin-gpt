@@ -6,28 +6,43 @@ process.noDeprecation = true;
 const { rspack } = require("@rspack/core");
 const path = require("path");
 const fs = require("fs");
-// 引入layouts中的donationConsole函数
-const { donationConsole } = require("./layouts");
-
-// 在命令行控制台打印信息
-donationConsole();
+const dotenv = require("dotenv");
 
 const configPath = path.resolve(__dirname, "rspack.config.js");
 const config = require(configPath);
 const mode = process.argv[2] === "build" ? "production" : "development";
 
-// 增强环境变量设置，确保所有编译阶段都使用相同的NODE_ENV值
+// 加载环境变量文件
+const envFile = `.env.${mode}`;
+const envPath = path.resolve(__dirname, envFile);
+
+if (fs.existsSync(envPath)) {
+  const envConfig = dotenv.parse(fs.readFileSync(envPath));
+  // 将环境变量注入到 process.env
+  Object.keys(envConfig).forEach(key => {
+    process.env[key] = envConfig[key];
+  });
+  console.log(`已加载环境配置文件: ${envFile}`);
+} else {
+  console.warn(`环境配置文件不存在: ${envFile}`);
+}
+
+// 增强环境变量设置
 process.env.NODE_ENV = mode;
-// 设置webpack特定的环境变量，以避免冲突
 process.env.WEBPACK_ENV = mode;
 process.env.BABEL_ENV = mode;
-// 确保mock始终被启用，即使在生产环境
-process.env.VUE_APP_MOCK_ENABLE = "true";
-console.log("设置环境变量 NODE_ENV =", process.env.NODE_ENV);
-console.log(
-  "设置环境变量 VUE_APP_MOCK_ENABLE =",
-  process.env.VUE_APP_MOCK_ENABLE
-);
+
+// 如果环境变量中没有设置，使用默认值
+process.env.VUE_APP_TITLE = process.env.VUE_APP_TITLE || "管理系统";
+process.env.VUE_APP_AUTHOR = process.env.VUE_APP_AUTHOR || "";
+process.env.VUE_APP_BASE_API = process.env.VUE_APP_BASE_API || "/api";
+process.env.VUE_APP_MOCK_ENABLE = process.env.VUE_APP_MOCK_ENABLE || "false";
+process.env.BASE_URL = process.env.BASE_URL || "/";
+
+console.log("当前环境:", mode);
+console.log("系统标题:", process.env.VUE_APP_TITLE);
+console.log("API地址:", process.env.VUE_APP_BASE_API);
+console.log("Mock启用:", process.env.VUE_APP_MOCK_ENABLE);
 
 // 读取配置
 config.mode = mode;
@@ -86,18 +101,18 @@ if (mode === "production") {
     const devServerOptions = config.devServer || {};
 
     // 设置mock服务器，不再检查环境变量，始终启用mock
-    if (!devServerOptions.setupMiddlewares) {
-      devServerOptions.setupMiddlewares = (middlewares, devServer) => {
-        if (!devServer) {
-          throw new Error("dev-server is not defined");
-        }
+    // if (!devServerOptions.setupMiddlewares) {
+    //   devServerOptions.setupMiddlewares = (middlewares, devServer) => {
+    //     if (!devServer) {
+    //       throw new Error("dev-server is not defined");
+    //     }
 
-        const mockServer = require("./mock/index");
-        mockServer(devServer.app);
+    //     const mockServer = require("./mock/index");
+    //     mockServer(devServer.app);
 
-        return middlewares;
-      };
-    }
+    //     return middlewares;
+    //   };
+    // }
 
     const server = new RspackDevServer(devServerOptions, compiler);
 

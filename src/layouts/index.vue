@@ -20,7 +20,6 @@
         </div>
       </div>
       <div class="vab-main main-padding">
-        <vab-ad />
         <vab-app-main />
       </div>
     </div>
@@ -43,7 +42,6 @@
           <vab-nav />
           <vab-tabs v-if="tabsBar === 'true' || tabsBar === true" />
         </div>
-        <vab-ad />
         <vab-app-main />
       </div>
     </div>
@@ -55,6 +53,7 @@
 import { ref, computed, onBeforeMount, onBeforeUnmount, onMounted, nextTick } from "vue";
 import { useStore } from "vuex";
 import { tokenName } from "@/config";
+import { debounce } from "lodash";
 
 const store = useStore();
 
@@ -82,7 +81,7 @@ const handleIsMobile = () => {
   return document.body.getBoundingClientRect().width - 1 < 992;
 };
 
-const handleResize = () => {
+const handleResize = debounce(() => {
   if (!document.hidden) {
     const isMobile = handleIsMobile();
     if (isMobile) {
@@ -94,7 +93,7 @@ const handleResize = () => {
 
     store.dispatch("settings/toggleDevice", isMobile ? "mobile" : "desktop");
   }
-};
+}, 100);
 
 onBeforeMount(() => {
   window.addEventListener("resize", handleResize);

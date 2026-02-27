@@ -1,63 +1,6 @@
 <template>
   <div class="index-container">
     <el-row :gutter="20">
-      <el-col :lg="24" :md="24" :sm="24" :xl="24" :xs="24">
-        <el-alert v-if="noticeList">
-          <div
-            style="display: flex; align-items: center; justify-content: center"
-          >
-            <a
-              href="https://github.com/zxwk1998/vue-admin-better"
-              target="_blank"
-            >
-              <img
-                src="https://img.shields.io/github/stars/zxwk1998/vue-admin-better?style=flat-square&label=Stars&logo=github"
-                style="margin-right: 10px"
-              />
-            </a>
-            <p v-html="noticeList.notice"></p>
-          </div>
-        </el-alert>
-      </el-col>
-      <el-col
-        v-for="(item, index) in iconList"
-        :key="index"
-        :lg="6"
-        :md="6"
-        :sm="6"
-        :xl="3"
-        :xs="12"
-      >
-        <el-card class="icon-card" shadow="never">
-          <div class="icon-container" @click="handleIconClick(item)">
-            <div class="icon-header">
-              <div class="icon-wrapper" :style="{ background: item.color }">
-                <el-icon>
-                  <component :is="getIconComponent(item.icon)" />
-                </el-icon>
-              </div>
-              <div class="icon-title">{{ item.title }}</div>
-            </div>
-            <div class="icon-content">
-              <div class="icon-description">
-                {{ getIconDescription(item.title) }}
-              </div>
-            </div>
-            <div class="icon-footer">
-              <div class="icon-stats">
-                <div class="stat-item">
-                  <el-icon><View /></el-icon>
-                  <span>{{ getRandomViews() }}</span>
-                </div>
-                <div class="stat-item">
-                  <el-icon><Heart /></el-icon>
-                  <span>{{ getRandomLikes() }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </el-card>
-      </el-col>
       <el-col :lg="6" :md="12" :sm="24" :xl="6" :xs="24">
         <el-card shadow="never">
           <template #header>
@@ -300,7 +243,6 @@
 <script>
 import VabChart from "@/plugins/echarts";
 import { dependencies, devDependencies } from "../../../package.json";
-import { getNoticeList } from "@/api/notice";
 import { random } from "lodash-es";
 import {
   View,
@@ -728,58 +670,6 @@ export default {
       noticeList: [],
       //其他信息
       userAgent: navigator.userAgent,
-      //卡片图标
-      iconList: [
-        {
-          icon: "video",
-          title: "视频播放器",
-          link: "https://vuejs-core.cn/shop-vite",
-          color: "#ffc069",
-        },
-        {
-          icon: "table",
-          title: "表格",
-          link: "https://vuejs-core.cn/shop-vite",
-          color: "#5cdbd3",
-        },
-        {
-          icon: "laptop-code",
-          title: "源码",
-          link: "https://github.com/zxwk1998/vue-admin-better",
-          color: "#b37feb",
-        },
-        {
-          icon: "book",
-          title: "书籍",
-          link: "https://vuejs-core.cn/shop-vite",
-          color: "#69c0ff",
-        },
-        {
-          icon: "bullhorn",
-          title: "公告",
-          link: "https://vuejs-core.cn/shop-vite",
-          color: "#ff85c0",
-        },
-        {
-          icon: "gift",
-          title: "礼物",
-          link: "https://vuejs-core.cn/shop-vite",
-          color: "#ffd666",
-        },
-
-        {
-          icon: "balance-scale-left",
-          title: "公平的世界",
-          link: "https://vuejs-core.cn/shop-vite",
-          color: "#ff9c6e",
-        },
-        {
-          icon: "coffee",
-          title: "休息一下",
-          link: "https://vuejs-core.cn/shop-vite",
-          color: "#95de64",
-        },
-      ],
     };
   },
   created() {
@@ -866,12 +756,12 @@ export default {
       this.drawerVisible = true;
     },
     async fetchData() {
-      try {
-        const res = await getNoticeList();
-        this.noticeList = res.data;
-      } catch (error) {
-        console.error("获取通知列表失败:", error);
-      }
+      // 使用 mock 数据替代 API 调用
+      this.noticeList = [
+        { id: 1, title: '欢迎使用 Vue3 Admin 脚手架', content: '这是一个基于 Vue 3 + Element Plus + Rspack 的后台管理系统模板', date: new Date().toLocaleDateString() },
+        { id: 2, title: '快速开始', content: '运行 npm run serve:rspack 即可启动开发服务器', date: new Date().toLocaleDateString() },
+        { id: 3, title: '功能特性', content: '支持多主题切换、响应式设计、完善的权限管理等功能', date: new Date().toLocaleDateString() },
+      ];
     },
     handleIconClick(item) {
       if (item.link) {

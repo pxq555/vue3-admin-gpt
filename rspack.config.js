@@ -1,4 +1,6 @@
 const path = require("path");
+const fs = require("fs");
+const dotenv = require("dotenv");
 const { Configuration, DefinePlugin } = require("@rspack/core");
 const HtmlRspackPlugin = require("html-rspack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
@@ -12,18 +14,25 @@ const {
 const dayjs = require("dayjs");
 const time = dayjs().format("YYYY-M-D HH:mm:ss");
 
-// 设置环境变量
-process.env.VUE_APP_TITLE = title || "vue-admin-better";
+// 加载环境变量文件（确保在 DefinePlugin 之前加载）
+const mode = process.argv[2] === "build" ? "production" : "development";
+const envFile = `.env.${mode}`;
+const envPath = path.resolve(__dirname, envFile);
+
+if (fs.existsSync(envPath)) {
+  const envConfig = dotenv.parse(fs.readFileSync(envPath));
+  // 将环境变量注入到 process.env
+  Object.keys(envConfig).forEach(key => {
+    process.env[key] = envConfig[key];
+  });
+}
+
+// 设置环境变量（优先使用 rspack.js 中已设置的环境变量）
 process.env.VUE_APP_UPDATE_TIME = time;
 process.env.BASE_URL = publicPath;
-// 删除这一行，避免覆盖rspack.js中设置的值
-// process.env.NODE_ENV = process.env.NODE_ENV || 'development'
-process.env.VUE_APP_MOCK_ENABLE = "true"; // 始终启用mock
-process.env.VUE_APP_AUTHOR = "vue-admin-better"; // 设置作者
+process.env.VUE_APP_BASE_API = process.env.VUE_APP_BASE_API || "/api";
 
 const resolve = (dir) => path.join(__dirname, dir);
-// 定义一个模式变量，避免冲突
-const mode = process.argv[2] === "build" ? "production" : "development";
 
 /**
  * @type {Configuration}
@@ -164,6 +173,7 @@ module.exports = {
       "process.env.VUE_APP_TITLE": JSON.stringify(process.env.VUE_APP_TITLE),
       "process.env.VUE_APP_MOCK_ENABLE": JSON.stringify("true"), // 确保在所有环境中mock都为true
       "process.env.VUE_APP_AUTHOR": JSON.stringify(process.env.VUE_APP_AUTHOR),
+      "process.env.VUE_APP_BASE_API": JSON.stringify(process.env.VUE_APP_BASE_API),
       "process.env.VUE_APP_UPDATE_TIME": JSON.stringify(
         process.env.VUE_APP_UPDATE_TIME
       ),
@@ -171,7 +181,7 @@ module.exports = {
     new HtmlRspackPlugin({
       template: "./public/index.html",
       filename: "index.html",
-      title: title || "vue-admin-better",
+      title: title || "管理系统",
       inject: "body",
       templateParameters: {
         BASE_URL: mode === "production" ? "./" : "/",
@@ -255,24 +265,18 @@ module.exports = {
       directory: path.join(__dirname, "public"),
     },
     client: {
-      overlay: {
-        errors: true,
-        warnings: false,
-      },
+      overlay: false,  // 关闭错误遮罩（Element Plus 的 ResizeObserver 警告是已知问题，不影响功能）
     },
     open: {
       target: [`http://localhost:${devPort || 8091}`],
     },
-    setupMiddlewares: (middlewares, devServer) => {
-      if (!devServer) {
-        throw new Error("dev-server is not defined");
-      }
-
-      // 始终加载mock服务器
-      const mockServer = require("./mock");
-      mockServer(devServer.app);
-
-      return middlewares;
-    },
+    proxy: [
+      {
+        context: ["/api"],
+        target: "https://cn.gempharmatech.com",
+        changeOrigin: true,
+        secure: true,
+      },
+    ],
   },
 };

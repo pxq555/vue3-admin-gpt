@@ -3,7 +3,7 @@ import { tokenName } from "@/config";
 
 export async function login(data) {
   return request({
-    url: "/login",
+    url: "/xhr-cms/customer-info/passwordLogin",
     method: "post",
     data,
   });

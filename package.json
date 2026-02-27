@@ -1,31 +1,34 @@
 {
-  "name": "vue3-admin-better",
-  "version": "3.0.1",
-  "author": "zxwk1998",
+  "name": "vue3-admin-scaffold",
+  "version": "1.0.0",
+  "description": "A Vue3 admin template with Element Plus and Rspack",
+  "author": "",
+  "license": "MIT",
   "participants": [],
-  "homepage": "https://vuejs-core.cn",
+  "homepage": "",
   "scripts": {
     "serve:rspack": "node --no-deprecation rspack.js serve",
     "build": "rimraf dist && node --no-deprecation rspack.js build",
-    "build:zip": "rimraf dist && node --no-deprecation rspack.js build && node build-zip.cjs",
-    "print-info": "node -e \"require('./layouts').donationConsole()\"",
-    "clear": "rimraf node_modules&&npm install  --registry=--registry=https://registry.npmmirror.com",
-    "update": "ncu -u --reject chalk,sass,sass-loader --registry=https://registry.npmmirror.com&&pnpm i --no-frozen-lockfile",
-    "module:update": "ncu -u --reject chalk,sass,sass-loader --registry=https://registry.npmmirror.com&&pnpm i --no-frozen-lockfile",
-    "push": "start ./push.sh"
+    "build:zip": "rimraf dist && node --no-deprecation rspack.js build && node build-zip.cjs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zxwk1998/vue-admin-better.git"
+    "url": ""
   },
-  "gitHooks": {
-    "pre-commit": "lint-staged"
+  "bin": {
+    "create-vue3-admin": "./cli.js"
   },
-  "lint-staged": {
-    "*.{js,jsx,vue}": [
-      "git add"
-    ]
-  },
+  "files": [
+    "src",
+    "public",
+    "layouts",
+    "rspack.config.js",
+    "rspack.js",
+    ".env.*",
+    "jsconfig.json",
+    "cli.js",
+    "build-zip.cjs"
+  ],
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",
     "axios": "^1.13.5",
@@ -36,7 +39,6 @@
     "echarts": "6.0.0",
     "element-plus": "^2.13.2",
     "jsencrypt": "^3.5.4",
-    "layouts": "file:layouts",
     "lodash": "^4.17.23",
     "lodash-es": "^4.17.23",
     "mitt": "^3.0.1",
@@ -63,6 +65,7 @@
     "chalk": "4.1.2",
     "chokidar": "^5.0.0",
     "css-loader": "^7.1.3",
+    "dotenv": "^17.2.4",
     "html-rspack-plugin": "^6.1.7",
     "path-browserify": "^1.0.1",
     "rimraf": "^6.1.2",
@@ -74,14 +77,15 @@
   },
   "keywords": [
     "vue",
+    "vue3",
     "admin",
-    "dashboard",
+    "template",
+    "scaffold",
     "element-plus",
-    "vue-admin",
-    "element-admin",
-    "boilerplate",
-    "admin-template",
-    "management-system"
+    "rspack",
+    "dashboard",
+    "management-system",
+    "cli"
   ],
   "engines": {
     "node": ">=16.0.0",

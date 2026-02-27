@@ -41,6 +41,11 @@ import { ref, reactive, computed } from "vue";
 import { ElMessage } from "element-plus";
 import dayjs from "dayjs";
 
+// 定义组件名，用于 keep-alive 缓存匹配
+defineOptions({
+  name: "Vue3Demo",
+});
+
 // 响应式变量
 const count = ref(0);
 const date = ref("");

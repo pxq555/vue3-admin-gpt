@@ -187,7 +187,7 @@ export default {
   created() {
     // 在created钩子中初始化主题
     // 不再使用事件总线 ($baseEventBus)
-    const theme = localStorage.getItem("vue-admin-better-theme");
+    const theme = localStorage.getItem("vue3-admin-theme");
     if (null !== theme) {
       this.theme = JSON.parse(theme);
       this.handleSaveTheme();
@@ -212,7 +212,7 @@ export default {
     handleSaveTheme() {
       let { name, layout, header, tabsBar } = this.theme;
       localStorage.setItem(
-        "vue-admin-better-theme",
+        "vue3-admin-theme",
         `{
             "name":"${name}",
             "layout":"${layout}",
@@ -225,24 +225,24 @@ export default {
       this.changeTabsBar(tabsBar);
       document.getElementsByTagName(
         "body"
-      )[0].className = `vue-admin-better-theme-${name}`;
+      )[0].className = `vue3-admin-theme-${name}`;
       this.drawerVisible = false;
     },
-    handleGetCode() {
-      const url =
-        "https://github.com/zxwk1998/vue-admin-better/tree/master/src/views";
-      let path = this.$route.path + "/index.vue";
-      if (path === "/vab/menu1/menu1-1/menu1-1-1/index.vue") {
-        path = "/vab/nested/menu1/menu1-1/menu1-1-1/index.vue";
-      }
-      if (path === "/vab/icon/awesomeIcon/index.vue") {
-        path = "/vab/icon/index.vue";
-      }
-      if (path === "/vab/icon/colorfulIcon/index.vue") {
-        path = "/vab/icon/colorfulIcon.vue";
-      }
-      window.open(url + path);
-    },
+    // handleGetCode() {
+    //   const url =
+    //     "https://github.com/zxwk1998/vue-admin-better/tree/master/src/views";
+    //   let path = this.$route.path + "/index.vue";
+    //   if (path === "/vab/menu1/menu1-1/menu1-1-1/index.vue") {
+    //     path = "/vab/nested/menu1/menu1-1/menu1-1-1/index.vue";
+    //   }
+    //   if (path === "/vab/icon/awesomeIcon/index.vue") {
+    //     path = "/vab/icon/index.vue";
+    //   }
+    //   if (path === "/vab/icon/colorfulIcon/index.vue") {
+    //     path = "/vab/icon/colorfulIcon.vue";
+    //   }
+    //   window.open(url + path);
+    // },
   },
 };
 </script>

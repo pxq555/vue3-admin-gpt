@@ -1,5 +1,4 @@
 /**
- * @author https://github.com/zxwk1998/vue-admin-better （不想保留author可删除）
  * @description router全局配置，如有必要可分文件抽离，其中asyncRoutes只有在intelligence模式下才会用到，vip文档中已提供路由的基础图标与小清新图标的配置方案，请仔细阅读
  */
 
@@ -69,7 +68,25 @@ export const asyncRoutes = [
       },
     ],
   }, */
-
+  {
+    path: "/example",
+    component: Layout,
+    redirect: "/example/index",
+    name: "Example",
+    alwaysShow: true,
+    meta: { title: "路由案例", icon: "box-open", defaultOpen: true },
+    children: [
+      {
+        path: "index",
+        name: "ExampleIndex",
+        component: () => import("@/views/demo/index"),
+        meta: {
+          title: "路由创建教程",
+          icon: "document",
+        },
+      },
+    ]
+  },
   {
     path: "/vab",
     component: Layout,
@@ -85,6 +102,7 @@ export const asyncRoutes = [
         meta: {
           title: "Vue 3 示例",
           permissions: ["admin"],
+          noKeepAlive: false,
         },
       },
       {
@@ -325,42 +343,6 @@ export const asyncRoutes = [
   },
 
   {
-    path: "/external-store",
-    component: Layout,
-    meta: {
-      title: "",
-      icon: "",
-    },
-    children: [
-      {
-        path: "https://vuejs-core.cn/store",
-        meta: {
-          title: "模板市场",
-          target: "_blank",
-          icon: "box-open",
-        },
-      },
-    ],
-  },
-  {
-    path: "/external-job",
-    component: Layout,
-    meta: {
-      title: "",
-      icon: "",
-    },
-    children: [
-      {
-        path: "https://job.vuejs-core.cn/posts",
-        meta: {
-          title: "找工作",
-          target: "_blank",
-          icon: "horse-head",
-        },
-      },
-    ],
-  },
-  {
     path: "/error",
     component: EmptyLayout,
     redirect: "noRedirect",
@@ -378,25 +360,6 @@ export const asyncRoutes = [
         name: "Error404",
         component: () => import("@/views/404"),
         meta: { title: "404" },
-      },
-    ],
-  },
-    {
-    path: '/donate-menu',
-    component: Layout,
-    meta: {
-      title: '支持我们',
-      icon: 'heart',
-    },
-    children: [
-      {
-        path: '/donate',
-        component: () => import('@/views/donate/index'),
-        meta: {
-          title: '支持我们',
-          icon: 'heart',
-          badge: 'Donate',
-        },
       },
     ],
   },

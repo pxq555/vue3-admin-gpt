@@ -1,5 +1,5 @@
 <template>
-  <div id="vue-admin-better">
+  <div id="app">
     <router-view />
   </div>
 </template>
