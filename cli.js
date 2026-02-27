@@ -34,8 +34,10 @@ function copyDir(src, dest, exclude = []) {
     const srcPath = path.join(src, entry.name);
     const destPath = path.join(dest, entry.name);
 
-    // 跳过排除的文件/目录
-    if (exclude.some(pattern => srcPath.includes(pattern))) {
+    // 跳过排除的文件/目录（只匹配文件名/目录名，不匹配路径）
+    const excludedPattern = exclude.find(pattern => entry.name === pattern || entry.name.startsWith(pattern));
+    // 也排除 .tgz 文件
+    if (excludedPattern || entry.name.endsWith('.tgz')) {
       continue;
     }
 
@@ -73,6 +75,11 @@ async function createProject() {
     'package-lock.json',
     'yarn.lock',
     '.claude',
+    projectName, // 排除目标项目目录本身（防止在项目目录内运行时无限循环）
+    // 排除项目开发时的临时文件和目录
+    'build-zip.js',
+    'build-zip.ps1',
+    'components.d.ts',
     // 排除常见的前端临时目录
     'my-test-project',
     'my-admin-app',

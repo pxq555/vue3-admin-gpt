@@ -20,12 +20,17 @@
   "files": [
     "src",
     "public",
+    "mock",
     "rspack.config.js",
     "rspack.js",
     ".env.*",
     "jsconfig.json",
     "cli.js",
-    "build-zip.cjs"
+    "build-zip.cjs",
+    "package.json",
+    "LICENSE",
+    "README.md",
+    "README.en.md"
   ],
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.2",

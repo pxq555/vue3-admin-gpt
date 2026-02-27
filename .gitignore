@@ -1,4 +1,5 @@
 # .gitignore
+.claude 
 .DS_Store
 node_modules
 dist
