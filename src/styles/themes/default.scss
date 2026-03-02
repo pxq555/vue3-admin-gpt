@@ -1,1 +1,30 @@
-/* 绿荫草场主题、荣耀典藏主题、暗黑之子主题加QQ讨论群972435319、1139183756后私聊群主获取，获取后将主题放到themes文件夹根目录即可 */
+/**
+ * 默认主题 - 蓝色系
+ */
+.vue3-admin-theme-default {
+  // 主色调变量（在组件中使用 CSS 变量）
+  --theme-primary: #409eff;
+  --theme-primary-light: #66b1ff;
+  --theme-primary-dark: #3a8ee6;
+
+  // 侧边栏背景
+  --theme-sidebar-bg: #21252b;
+  --theme-sidebar-active-bg: #409eff;
+
+  // 顶部导航栏
+  --theme-header-bg: #ffffff;
+  --theme-header-text: #303133;
+
+  // 标签栏
+  --theme-tabs-bg: #ffffff;
+  --theme-tabs-active-bg: #409eff;
+
+  // 卡片背景
+  --theme-card-bg: #ffffff;
+  --theme-card-border: #ebeef5;
+
+  // 文字颜色
+  --theme-text-primary: #303133;
+  --theme-text-regular: #606266;
+  --theme-text-secondary: #909399;
+}
