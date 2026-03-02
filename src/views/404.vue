@@ -49,6 +49,8 @@
 </template>
 
 <script>
+import { useTabsBarStore } from "@/store";
+
 export default {
   name: "Page404",
   data() {
@@ -74,7 +76,8 @@ export default {
           this.jumpTime--;
         } else {
           this.$router.push({ path: "/" });
-          this.$store.dispatch("tabsBar/delOthersRoutes", {
+          const tabsBarStore = useTabsBarStore();
+          tabsBarStore.delOthersRoutes({
             path: "/",
           });
           clearInterval(this.timer);

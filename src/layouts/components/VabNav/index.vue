@@ -30,21 +30,21 @@
 
 <script setup>
 import { ref, computed, onBeforeUnmount } from "vue";
-import { useStore } from "vuex";
 import { Refresh } from "@element-plus/icons-vue";
+import { useSettingsStore } from "@/store";
 
 defineOptions({
   name: "VabNav",
 });
 
-const store = useStore();
+const settingsStore = useSettingsStore();
 const pulse = ref(false);
 let timeOutID = null;
 
-const collapse = computed(() => store.getters["settings/collapse"]);
+const collapse = computed(() => settingsStore.collapse);
 
 const handleCollapse = () => {
-  store.dispatch("settings/changeCollapse");
+  settingsStore.changeCollapse();
 };
 
 const refreshRoute = async () => {

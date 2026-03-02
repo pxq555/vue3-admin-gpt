@@ -1,45 +1,48 @@
 /**
  * @description 路由拦截状态管理，目前两种模式：all模式与intelligence模式
  */
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 import { asyncRoutes, constantRoutes } from '@/router'
 import { getRouterList } from '@/api/router'
 import { convertRouter, filterAsyncRoutes } from '@/utils/handleRoutes'
 
-const state = () => ({
-  routes: [],
-  partialRoutes: [],
-})
-const getters = {
-  routes: (state) => state.routes,
-  partialRoutes: (state) => state.partialRoutes,
-}
-const mutations = {
-  setRoutes(state, routes) {
-    state.routes = constantRoutes.concat(routes)
-  },
-  setAllRoutes(state, routes) {
-    state.routes = constantRoutes.concat(routes)
-  },
-}
-const actions = {
+export const useRoutesStore = defineStore('routes', () => {
+  // state
+  const routes = ref([])
+  const partialRoutes = ref([])
+
+  // getters
+  const getRoutes = () => routes.value
+  const getPartialRoutes = () => partialRoutes.value
+
+  // mutations
+  const setRoutes = (routesValue) => {
+    routes.value = constantRoutes.concat(routesValue)
+  }
+
+  const setAllRoutes = (routesValue) => {
+    routes.value = constantRoutes.concat(routesValue)
+  }
+
+  // actions
   /**
    * @description intelligence模式设置路由
-   * @param {*} { commit }
    * @param {*} permissions
    * @returns
    */
-  async setRoutes({ commit }, permissions) {
+  const setRoutesAction = async (permissions) => {
     //根据permissions做路由筛选
     let accessedRoutes = filterAsyncRoutes(asyncRoutes, permissions)
-    commit('setRoutes', accessedRoutes)
+    setRoutes(accessedRoutes)
     return accessedRoutes
-  },
+  }
+
   /**
    * @description all模式设置路由
-   * @param {*} { commit }
    * @returns
    */
-  async setAllRoutes({ commit }) {
+  const setAllRoutesAction = async () => {
     try {
       let { data } = await getRouterList()
       if (!data || !Array.isArray(data)) {
@@ -48,13 +51,21 @@ const actions = {
       }
 
       const accessedRoutes = convertRouter(data)
-      commit('setAllRoutes', accessedRoutes)
+      setAllRoutes(accessedRoutes)
       return accessedRoutes
     } catch (error) {
       console.error('获取路由列表失败', error)
-      commit('setAllRoutes', [])
+      setAllRoutes([])
       return []
     }
-  },
-}
-export default { state, getters, mutations, actions }
+  }
+
+  return {
+    // state
+    routes,
+    partialRoutes,
+    // actions
+    setRoutes: setRoutesAction,
+    setAllRoutes: setAllRoutesAction,
+  }
+})

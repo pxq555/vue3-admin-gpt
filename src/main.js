@@ -1,7 +1,7 @@
 import { createApp } from "vue";
+import { createPinia } from "pinia";
 import App from "./App.vue";
 import router from "./router";
-import store from "@/store"; // 导入Vuex store
 import plugins from "./plugins";
 // 导入布局组件注册函数
 import { registerLayoutComponents } from "@/layouts/export";
@@ -14,8 +14,9 @@ import { title } from "@/config";
 // 创建应用实例
 const app = createApp(App);
 
-// 使用Vuex
-app.use(store);
+// 使用Pinia
+const pinia = createPinia();
+app.use(pinia);
 
 app.use(router);
 

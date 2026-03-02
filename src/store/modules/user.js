@@ -1,6 +1,18 @@
 /**
  * @description 登录、获取用户信息、退出登录、清除accessToken逻辑，不建议修改
  */
+import { defineStore } from 'pinia'
+import { computed, ref } from 'vue'
+import { getUserInfo, login, logout } from "@/api/user"
+import {
+  getAccessToken as getAccessTokenFunction,
+  removeAccessToken,
+  setAccessToken,
+} from "@/utils/accessToken"
+import {RSA} from '@/utils/password'
+import { resetRouter } from "@/router"
+import { title, tokenName } from "@/config"
+import { ElMessage } from "element-plus"
 
 // 默认头像列表
 const defaultAvatars = [
@@ -18,66 +30,61 @@ const defaultAvatars = [
   "https://oss.gempharmatech.com/upload/file/20230918/51d19975-d527-43ed-8cb3-afa3bf0ea7d2.png",
   "https://oss.gempharmatech.com/upload/file/20230918/537a52d8-7d5e-41b9-ae3b-1a656c2971b3.png",
   "https://oss.gempharmatech.com/upload/file/20230918/13812b25-f42f-4826-a2eb-ad7166a9b668.png"
-];
+]
 
 // 随机获取一个默认头像
 const getRandomAvatar = () => {
-  return defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)];
-};
+  return defaultAvatars[Math.floor(Math.random() * defaultAvatars.length)]
+}
 
-import { getUserInfo, login, logout } from "@/api/user";
-import {
-  getAccessToken,
-  removeAccessToken,
-  setAccessToken,
-} from "@/utils/accessToken";
-import {RSA} from '@/utils/password'
-import { resetRouter } from "@/router";
-import { title, tokenName } from "@/config";
-import { ElMessage } from "element-plus";
 
-const state = () => ({
-  accessToken: getAccessToken(),
-  username: "",
-  avatar: getRandomAvatar(),
-  permissions: [],
-});
-const getters = {
-  accessToken: (state) => state.accessToken,
-  username: (state) => state.username,
-  avatar: (state) => state.avatar,
-  permissions: (state) => state.permissions,
-};
-const mutations = {
-  setAccessToken(state, accessToken) {
-    state.accessToken = accessToken;
-    setAccessToken(accessToken);
-  },
-  setUsername(state, username) {
-    state.username = username;
-  },
-  setAvatar(state, avatar) {
-    state.avatar = avatar;
-  },
-  setPermissions(state, permissions) {
-    state.permissions = permissions;
-  },
-};
-const actions = {
-  setPermissions({ commit }, permissions) {
-    commit("setPermissions", permissions);
-  },
-  async login({ commit }, userInfo) {
+
+export const useUserStore = defineStore('user', () => {
+  // state
+  const accessToken = ref(getAccessTokenFunction())
+  const username = ref("")
+  const avatar = ref(getRandomAvatar())
+  const permissions = ref([])
+
+  // getters
+  const getAccessToken = computed(() => accessToken.value)
+  const getUsername = computed(() => username.value)
+  const getAvatar = computed(() => avatar.value)
+  const getPermissions = computed(() => permissions.value)
+
+  // actions
+  const setAccessTokenAction = (token) => {
+    accessToken.value = token
+    setAccessToken(token)
+  }
+
+  const setUsername = (name) => {
+    username.value = name
+  }
+
+  const setAvatar = (avatarUrl) => {
+    avatar.value = avatarUrl
+  }
+
+  const setPermissionsAction = (perms) => {
+    permissions.value = perms
+  }
+
+  const setPermissions = (perms) => {
+    setPermissionsAction(perms)
+  }
+
+  const loginAction = async (userInfo) => {
     // const { data } = await login(userInfo);
     let params = {
       customerName: userInfo.username,
       password: RSA(userInfo.password),
     }
-    const { data } = await login(params);
-    const accessToken = data;
-    if (accessToken) {
-      commit("setAccessToken", accessToken);
-      const hour = new Date().getHours();
+    const { data } = await login(params)
+    const token = data
+    if (token) {
+      setAccessTokenAction(token)
+      const hour = new Date().getHours()
       const thisTime =
         hour < 8
           ? "早上好"
@@ -87,45 +94,69 @@ const actions = {
           ? "中午好"
           : hour < 18
           ? "下午好"
-          : "晚上好";
-      ElMessage.success(`欢迎登录${title}，${thisTime}！`);
+          : "晚上好"
+      ElMessage.success(`欢迎登录${title}，${thisTime}！`)
     } else {
-      ElMessage.error(`登录接口异常，未正确返回${tokenName}...`);
+      ElMessage.error(`登录接口异常，未正确返回${tokenName}...`)
     }
-  },
-  async getUserInfo({ commit, state }) {
+  }
+
+  const getUserInfoAction = async () => {
     try {
-      const { data } = await getUserInfo(state.accessToken);
+      const { data } = await getUserInfo(accessToken.value)
       if (!data) {
-        ElMessage.error("验证失败，请重新登录...");
-        return false;
+        ElMessage.error("验证失败，请重新登录...")
+        return false
       }
-      let { permissions, username, avatar } = data;
-      if (permissions && username && Array.isArray(permissions)) {
-        commit("setPermissions", permissions);
-        commit("setUsername", username);
-        commit("setAvatar", avatar);
-        return permissions;
+      let { permissions: perms, name: name, avatar: avatarUrl } = data
+      if (perms && name && Array.isArray(perms)) {
+        setPermissionsAction(perms)
+        setUsername(name)
+        setAvatar(avatarUrl)
+        return perms
       } else {
-        ElMessage.error("用户信息接口异常");
-        return false;
+        ElMessage.error("用户信息接口异常")
+        return false
       }
     } catch (error) {
-      console.error("获取用户信息失败:", error);
-      ElMessage.error("获取用户信息失败，请重新登录");
-      return false;
+      console.error("获取用户信息失败:", error)
+      ElMessage.error("获取用户信息失败，请重新登录")
+      return false
     }
-  },
-  async logout({ dispatch }) {
-    await logout(state.accessToken);
-    await dispatch("resetAccessToken");
-    await resetRouter();
-    location.reload();
-  },
-  resetAccessToken({ commit }) {
-    commit("setPermissions", []);
-    commit("setAccessToken", "");
-    removeAccessToken();
-  },
-};
-export default { state, getters, mutations, actions };
+  }
+
+  const logoutAction = async () => {
+    await logout(accessToken.value)
+    await resetAccessTokenAction()
+    await resetRouter()
+    location.reload()
+  }
+
+  const resetAccessTokenAction = () => {
+    setPermissionsAction([])
+    setAccessTokenAction("")
+    removeAccessToken()
+  }
+
+  return {
+    // state
+    accessToken,
+    username,
+    avatar,
+    permissions,
+    // getters
+    getAccessToken,
+    getUsername,
+    getAvatar,
+    getPermissions,
+    // actions
+    setAccessToken: setAccessTokenAction,
+    setUsername,
+    setAvatar,
+    setPermissions,
+    login: loginAction,
+    getUserInfo: getUserInfoAction,
+    logout: logoutAction,
+    resetAccessToken: resetAccessTokenAction,
+  }
+})

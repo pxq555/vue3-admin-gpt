@@ -74,7 +74,7 @@ export const asyncRoutes = [
     redirect: "/example/index",
     name: "Example",
     alwaysShow: true,
-    meta: { title: "路由案例", icon: "box-open", defaultOpen: true },
+    meta: { title: "开发指南", icon: "box-open", defaultOpen: true },
     children: [
       {
         path: "index",
@@ -83,6 +83,15 @@ export const asyncRoutes = [
         meta: {
           title: "路由创建教程",
           icon: "document",
+        },
+      },
+      {
+        path: "pinia",
+        name: "PiniaGuideIndex",
+        component: () => import("@/views/pinia-guide/index"),
+        meta: {
+          title: "Pinia 使用教程",
+          icon: "setting",
         },
       },
     ]

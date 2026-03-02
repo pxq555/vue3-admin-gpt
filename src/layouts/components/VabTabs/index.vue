@@ -53,7 +53,6 @@
 
 <script>
 import path from "path";
-import { mapGetters } from "vuex";
 import {
   ArrowDown,
   CircleClose,
@@ -71,6 +70,7 @@ import {
   List,
   Odometer,
 } from "@element-plus/icons-vue";
+import { useTabsBarStore, useRoutesStore } from "@/store";
 
 export default {
   name: "VabTabs",
@@ -95,20 +95,24 @@ export default {
     return {
       affixtabs: [],
       tabActive: "",
+      tabsBarStore: useTabsBarStore(),
+      routesStore: useRoutesStore(),
     };
   },
 
   computed: {
-    ...mapGetters({
-      visitedRoutes: "tabsBar/visitedRoutes",
-      routes: "routes/routes",
-    }),
+    visitedRoutes() {
+      return this.tabsBarStore.visitedRoutes;
+    },
+    routes() {
+      return this.routesStore.routes;
+    },
   },
   watch: {
     $route: {
       handler(route) {
-        this.inittabs();
-        this.addtabs();
+        this.initTabs();
+        this.addTab();
         let tabActive = "";
         this.visitedRoutes.forEach((item, index) => {
           if (item.path === this.$route.path) {
@@ -131,8 +135,7 @@ export default {
           view = item;
         }
       });
-      const { visitedRoutes } = await this.$store.dispatch(
-        "tabsBar/delRoute",
+      const { visitedRoutes } = await this.tabsBarStore.delRoute(
         view
       );
       if (this.isActive(view)) {
@@ -159,7 +162,7 @@ export default {
     isAffix(tag) {
       return tag.meta && tag.meta.affix;
     },
-    filterAffixtabs(routes, basePath = "/") {
+    filterAffixTabs(routes, basePath = "/") {
       let tabs = [];
       routes.forEach((route) => {
         if (route.meta && route.meta.affix) {
@@ -172,26 +175,26 @@ export default {
           });
         }
         if (route.children) {
-          const temptabs = this.filterAffixtabs(route.children, route.path);
-          if (temptabs.length >= 1) {
-            tabs = [...tabs, ...temptabs];
+          const tempTabs = this.filterAffixTabs(route.children, route.path);
+          if (tempTabs.length >= 1) {
+            tabs = [...tabs, ...tempTabs];
           }
         }
       });
       return tabs;
     },
-    inittabs() {
-      const affixtabs = (this.affixtabs = this.filterAffixtabs(this.routes));
+    initTabs() {
+      const affixtabs = (this.affixtabs = this.filterAffixTabs(this.routes));
       for (const tag of affixtabs) {
         if (tag.name) {
-          this.$store.dispatch("tabsBar/addVisitedRoute", tag);
+          this.tabsBarStore.addVisitedRoute(tag);
         }
       }
     },
-    addtabs() {
+    addTab() {
       const { name } = this.$route;
       if (name) {
-        this.$store.dispatch("tabsBar/addVisitedRoute", this.$route);
+        this.tabsBarStore.addVisitedRoute(this.$route);
       }
       return false;
     },
@@ -221,8 +224,7 @@ export default {
       // this.$baseEventBus.$emit('reloadrouter-view')
     },
     async closeSelectedTag(view) {
-      const { visitedRoutes } = await this.$store.dispatch(
-        "tabsBar/delRoute",
+      const { visitedRoutes } = await this.tabsBarStore.delRoute(
         view
       );
       if (this.isActive(view)) {
@@ -231,21 +233,19 @@ export default {
     },
     async closeOtherstabs() {
       const view = await this.toThisTag();
-      await this.$store.dispatch("tabsBar/delOthersRoutes", view);
+      await this.tabsBarStore.delOthersRoutes(view);
     },
     async closeLefttabs() {
       const view = await this.toThisTag();
-      await this.$store.dispatch("tabsBar/delLeftRoutes", view);
+      await this.tabsBarStore.delLeftRoutes(view);
     },
     async closeRighttabs() {
       const view = await this.toThisTag();
-      await this.$store.dispatch("tabsBar/delRightRoutes", view);
+      await this.tabsBarStore.delRightRoutes(view);
     },
     async closeAlltabs() {
       const view = await this.toThisTag();
-      const { visitedRoutes } = await this.$store.dispatch(
-        "tabsBar/delAllRoutes"
-      );
+      const { visitedRoutes } = await this.tabsBarStore.delAllRoutes();
       if (this.affixtabs.some((tag) => tag.path === view.path)) {
         return;
       }

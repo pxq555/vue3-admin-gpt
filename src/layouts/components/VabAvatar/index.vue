@@ -50,7 +50,6 @@
 
 <script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
 import { useRouter, useRoute } from "vue-router";
 import { ElMessage } from "element-plus";
 import { recordRoute } from "@/config";
@@ -61,19 +60,21 @@ import {
   Link,
   SwitchButton,
 } from "@element-plus/icons-vue";
+import { useUserStore, useSettingsStore } from "@/store";
 
 defineOptions({
   name: "VabAvatar",
 });
 
-const store = useStore();
 const router = useRouter();
 const route = useRoute();
+const userStore = useUserStore();
+const settingsStore = useSettingsStore();
 
 // 计算属性
-const avatar = computed(() => store.getters["user/avatar"]);
-const username = computed(() => store.getters["user/username"]);
-const layout = computed(() => store.getters["settings/layout"]);
+const avatar = computed(() => userStore.avatar);
+const username = computed(() => userStore.username);
+const layout = computed(() => settingsStore.layout);
 const isHorizontalLayout = computed(() => layout.value === "horizontal");
 
 // 方法
@@ -100,7 +101,7 @@ const settings = () => {
 };
 
 const logout = () => {
-  store.dispatch("user/logout");
+  userStore.logout();
   if (recordRoute) {
     const fullPath = route.fullPath;
     router.push(`/login?redirect=${fullPath}`);

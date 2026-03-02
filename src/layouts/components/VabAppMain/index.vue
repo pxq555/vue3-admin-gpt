@@ -13,10 +13,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
 import { copyright, footerCopyright, keepAliveMaxNum, title } from "@/config";
 import { CopyDocument } from "@element-plus/icons-vue";
 import eventBus from "@/utils/eventBus";
+import { useTabsBarStore, useSettingsStore } from "@/store";
 
 export default {
   name: "VabAppMain",
@@ -32,13 +32,17 @@ export default {
       keepAliveMaxNum,
       routerView: true,
       footerCopyright,
+      tabsBarStore: useTabsBarStore(),
+      settingsStore: useSettingsStore(),
     };
   },
   computed: {
-    ...mapGetters({
-      visitedRoutes: "tabsBar/visitedRoutes",
-      device: "settings/device",
-    }),
+    visitedRoutes() {
+      return this.tabsBarStore.visitedRoutes;
+    },
+    device() {
+      return this.settingsStore.device;
+    },
     cachedRoutes() {
       const cachedRoutesArr = [];
       this.visitedRoutes.forEach((item) => {
@@ -70,9 +74,9 @@ export default {
   },
   mounted() {},
   methods: {
-    ...mapActions({
-      foldSideBar: "settings/foldSideBar",
-    }),
+    foldSideBar() {
+      this.settingsStore.foldSideBar();
+    },
     // 重新加载路由视图
     reloadRouterView() {
       this.routerView = false;

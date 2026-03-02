@@ -153,9 +153,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
 import { layout as defaultLayout } from "@/config";
 import { Brush, Picture, Grid, Setting } from "@element-plus/icons-vue";
+import { useSettingsStore } from "@/store";
 
 export default {
   name: "VabTheme",
@@ -174,15 +174,22 @@ export default {
         header: "fixed",
         tabsBar: "",
       },
+      settingsStore: useSettingsStore(),
     };
   },
   computed: {
-    ...mapGetters({
-      layout: "settings/layout",
-      header: "settings/header",
-      tabsBar: "settings/tabsBar",
-      themeBar: "settings/themeBar",
-    }),
+    layout() {
+      return this.settingsStore.layout;
+    },
+    header() {
+      return this.settingsStore.header;
+    },
+    tabsBar() {
+      return this.settingsStore.tabsBar;
+    },
+    themeBar() {
+      return this.settingsStore.themeBar;
+    },
   },
   created() {
     // 在created钩子中初始化主题
@@ -198,11 +205,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions({
-      changeLayout: "settings/changeLayout",
-      changeHeader: "settings/changeHeader",
-      changeTabsBar: "settings/changeTabsBar",
-    }),
+    changeLayout(layout) {
+      this.settingsStore.changeLayout(layout);
+    },
+    changeHeader(header) {
+      this.settingsStore.changeHeader(header);
+    },
+    changeTabsBar(tabsBar) {
+      this.settingsStore.changeTabsBar(tabsBar);
+    },
     handleIsMobile() {
       return document.body.getBoundingClientRect().width - 1 < 992;
     },

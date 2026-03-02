@@ -50,17 +50,19 @@
 
 <script setup>
 import { ref, computed, onBeforeUnmount } from "vue";
-import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import variables from "@/styles/variables.scss";
 import { Refresh } from "@element-plus/icons-vue";
+import { useRoutesStore, useTabsBarStore, useSettingsStore } from "@/store";
 
 defineOptions({
   name: "VabTop",
 });
 
-const store = useStore();
 const route = useRoute();
+const routesStore = useRoutesStore();
+const tabsBarStore = useTabsBarStore();
+const settingsStore = useSettingsStore();
 
 // 响应式数据
 const pulse = ref(false);
@@ -68,9 +70,9 @@ const menuTrigger = ref("hover");
 let timeOutID = null;
 
 // 计算属性
-const routes = computed(() => store.getters["routes/routes"]);
-const visitedRoutes = computed(() => store.getters["tabsBar/visitedRoutes"]);
-const collapse = computed(() => store.getters["settings/collapse"]);
+const routes = computed(() => routesStore.routes);
+const visitedRoutes = computed(() => tabsBarStore.visitedRoutes);
+const collapse = computed(() => settingsStore.collapse);
 const defaultOpens = computed(() => []);
 
 const activeMenu = computed(() => {

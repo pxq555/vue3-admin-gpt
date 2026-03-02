@@ -1,22 +1,25 @@
 /**
  * @description 代码生成机状态管理
  */
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-const state = () => ({
-  srcCode: '',
+export const useTableStore = defineStore('table', () => {
+  // state
+  const srcCode = ref('')
+
+  // getters
+  const getSrcCode = () => srcCode.value
+
+  // actions
+  const setTableCode = (code) => {
+    srcCode.value = code
+  }
+
+  return {
+    // state
+    srcCode,
+    // actions
+    setTableCode,
+  }
 })
-const getters = {
-  srcTableCode: (state) => state.srcCode,
-}
-
-const mutations = {
-  setTableCode(state, srcCode) {
-    state.srcCode = srcCode
-  },
-}
-const actions = {
-  setTableCode({ commit }, srcCode) {
-    commit('setTableCode', srcCode)
-  },
-}
-export default { state, getters, mutations, actions }

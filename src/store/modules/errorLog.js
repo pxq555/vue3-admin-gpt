@@ -1,27 +1,30 @@
 /**
  * @description 异常捕获的状态拦截，请勿修改
  */
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-const state = () => ({
-  errorLogs: [],
+export const useErrorLogStore = defineStore('errorLog', () => {
+  // state
+  const errorLogs = ref([])
+
+  // getters
+  const getErrorLogs = () => errorLogs.value
+
+  // actions
+  const addErrorLog = (errorLog) => {
+    errorLogs.value.push(errorLog)
+  }
+
+  const clearErrorLog = () => {
+    errorLogs.value.splice(0)
+  }
+
+  return {
+    // state
+    errorLogs,
+    // actions
+    addErrorLog,
+    clearErrorLog,
+  }
 })
-const getters = {
-  errorLogs: (state) => state.errorLogs,
-}
-const mutations = {
-  addErrorLog(state, errorLog) {
-    state.errorLogs.push(errorLog)
-  },
-  clearErrorLog: (state) => {
-    state.errorLogs.splice(0)
-  },
-}
-const actions = {
-  addErrorLog({ commit }, errorLog) {
-    commit('addErrorLog', errorLog)
-  },
-  clearErrorLog({ commit }) {
-    commit('clearErrorLog')
-  },
-}
-export default { state, getters, mutations, actions }

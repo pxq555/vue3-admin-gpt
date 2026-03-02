@@ -14,20 +14,23 @@
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
+import { useSettingsStore } from "@/store";
 
 export default {
   name: "VabLogo",
   data() {
     return {
       title: this.$baseTitle,
+      settingsStore: useSettingsStore(),
     };
   },
   computed: {
-    ...mapGetters({
-      logo: "settings/logo",
-      layout: "settings/layout",
-    }),
+    logo() {
+      return this.settingsStore.logo;
+    },
+    layout() {
+      return this.settingsStore.layout;
+    },
   },
 };
 </script>
