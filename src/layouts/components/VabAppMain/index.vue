@@ -1,6 +1,6 @@
 <template>
   <div class="app-main-container">
-    <router-view v-slot="{ Component }">
+    <router-view v-if="routerView" v-slot="{ Component }">
       <transition mode="out-in" name="fade-transform">
         <keep-alive :include="cachedRoutes" :max="keepAliveMaxNum">
           <component :is="Component" class="app-main-height" />
