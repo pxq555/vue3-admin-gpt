@@ -100,19 +100,24 @@ if (mode === "production") {
     // 使用rspack.config.js中的所有devServer配置
     const devServerOptions = config.devServer || {};
 
-    // 设置mock服务器，不再检查环境变量，始终启用mock
-    // if (!devServerOptions.setupMiddlewares) {
-    //   devServerOptions.setupMiddlewares = (middlewares, devServer) => {
-    //     if (!devServer) {
-    //       throw new Error("dev-server is not defined");
-    //     }
+    // 根据环境变量控制是否启用mock服务
+    if (process.env.VUE_APP_MOCK_ENABLE === "true") {
+      if (!devServerOptions.setupMiddlewares) {
+        devServerOptions.setupMiddlewares = (middlewares, devServer) => {
+          if (!devServer) {
+            throw new Error("dev-server is not defined");
+          }
 
-    //     const mockServer = require("./mock/index");
-    //     mockServer(devServer.app);
+          const mockServer = require("./mock/index");
+          mockServer(devServer.app);
 
-    //     return middlewares;
-    //   };
-    // }
+          return middlewares;
+        };
+      }
+      console.log("Mock服务已启用");
+    } else {
+      console.log("Mock服务未启用 (VUE_APP_MOCK_ENABLE=" + process.env.VUE_APP_MOCK_ENABLE + ")");
+    }
 
     const server = new RspackDevServer(devServerOptions, compiler);
 

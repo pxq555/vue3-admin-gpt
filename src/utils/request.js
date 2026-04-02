@@ -69,17 +69,22 @@ instance.interceptors.request.use(
   (config) => {
     const userStore = useUserStore();
     if (userStore.accessToken) {
-      config.headers[tokenName] = userStore.accessToken;
+      config.headers[tokenName] = `Bearer ${userStore.accessToken}`;
+    }
+
+    // 如果是FormData，删除默认的Content-Type，让浏览器自动设置
+    if (config.data instanceof FormData) {
+      delete config.headers["Content-Type"];
     }
 
     //这里会过滤所有为空、0、false的key，如果不需要请自行注释
-    if (config.data) config.data = pickBy(config.data, identity);
-    if (
-      config.data &&
-      config.headers["Content-Type"] ===
-        "application/x-www-form-urlencoded;charset=UTF-8"
-    )
-      config.data = qs.stringify(config.data);
+    // if (config.data) config.data = pickBy(config.data, identity);
+    // if (
+    //   config.data &&
+    //   config.headers["Content-Type"] ===
+    //     "application/x-www-form-urlencoded;charset=UTF-8"
+    // )
+    //   config.data = qs.stringify(config.data);
     if (debounce.some((item) => config.url.includes(item)))
       loadingInstance = ElLoading.service();
 

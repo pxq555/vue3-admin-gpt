@@ -40,6 +40,8 @@ const resolve = (dir) => path.join(__dirname, dir);
 module.exports = {
   mode: mode,
   context: __dirname,
+  // 配置 source map 以支持开发调试
+  devtool: mode === "production" ? "source-map" : "eval-cheap-module-source-map",
   entry: {
     app: "./src/main.js",
   },
@@ -171,7 +173,7 @@ module.exports = {
       "process.env.NODE_ENV": JSON.stringify(mode),
       "process.env.BASE_URL": JSON.stringify(process.env.BASE_URL),
       "process.env.VUE_APP_TITLE": JSON.stringify(process.env.VUE_APP_TITLE),
-      "process.env.VUE_APP_MOCK_ENABLE": JSON.stringify("true"), // 确保在所有环境中mock都为true
+      "process.env.VUE_APP_MOCK_ENABLE": JSON.stringify(process.env.VUE_APP_MOCK_ENABLE), // 确保在所有环境中mock都为true
       "process.env.VUE_APP_AUTHOR": JSON.stringify(process.env.VUE_APP_AUTHOR),
       "process.env.VUE_APP_BASE_API": JSON.stringify(process.env.VUE_APP_BASE_API),
       "process.env.VUE_APP_UPDATE_TIME": JSON.stringify(
