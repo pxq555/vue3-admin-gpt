@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const dotenv = require("dotenv");
-const { Configuration, DefinePlugin } = require("@rspack/core");
+const { Configuration, DefinePlugin, rspack } = require("@rspack/core");
 const HtmlRspackPlugin = require("html-rspack-plugin");
 const { VueLoaderPlugin } = require("vue-loader");
 const {
@@ -200,6 +200,18 @@ module.exports = {
               removeScriptTypeAttributes: true,
             }
           : false,
+    }),
+    // 复制 public 目录下的静态资源到 dist 目录（排除 index.html）
+    new rspack.CopyRspackPlugin({
+      patterns: [
+        {
+          from: "public",
+          to: "",
+          globOptions: {
+            ignore: ["**/index.html"],
+          },
+        },
+      ],
     }),
   ],
   optimization: {
